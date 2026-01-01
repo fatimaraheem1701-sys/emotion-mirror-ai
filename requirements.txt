@@ -2,4 +2,6 @@ streamlit
 pandas
 textblob
 deepface
-tf-keras
+opencv-python-headless
+tensorflow
+keras
