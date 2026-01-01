@@ -1,0 +1,98 @@
+import streamlit as st
+import pandas as pd
+from textblob import TextBlob
+from deepface import DeepFace
+import tempfile
+
+# ----------------------
+# Page config
+# ----------------------
+st.set_page_config(
+    page_title="Emotion Detection & Recommendation",
+    page_icon="😊"
+)
+
+st.title("🎭 Emotion Detection & Recommendation System")
+
+# ----------------------
+# Load dataset
+# ----------------------
+emotion_df = pd.read_csv("emotions_data.csv")
+
+# ----------------------
+# Functions
+# ----------------------
+def detect_text_emotion(text):
+    polarity = TextBlob(text).sentiment.polarity
+
+    if polarity > 0.5:
+        return "Happy"
+    elif polarity > 0.1:
+        return "Hopeful"
+    elif polarity < -0.5:
+        return "Depressed"
+    elif polarity < -0.1:
+        return "Sad"
+    else:
+        return "Neutral"
+
+def detect_face_emotion(image_path):
+    result = DeepFace.analyze(
+        img_path=image_path,
+        actions=['emotion'],
+        enforce_detection=False
+    )
+    return result[0]['dominant_emotion']
+
+def recommend(emotion):
+    row = emotion_df[emotion_df["Emotion"].str.lower() == emotion.lower()]
+    if not row.empty:
+        return row.iloc[0]["Song"], row.iloc[0]["Quote"]
+    else:
+        return "No song found", "No quote found"
+
+# ----------------------
+# App UI
+# ----------------------
+option = st.radio(
+    "Choose input type:",
+    ("Text Emotion Detection", "Face Emotion Detection")
+)
+
+# ----------------------
+# TEXT EMOTION
+# ----------------------
+if option == "Text Emotion Detection":
+    text = st.text_area("Enter how you feel:")
+
+    if st.button("Detect Emotion"):
+        emotion = detect_text_emotion(text)
+        song, quote = recommend(emotion)
+
+        st.success(f"Detected Emotion: {emotion}")
+        st.write("🎵 **Recommended Song:**", song)
+        st.write("💬 **Quote:**", quote)
+
+# ----------------------
+# FACE EMOTION
+# ----------------------
+if option == "Face Emotion Detection":
+    uploaded_file = st.file_uploader(
+        "Upload your face image",
+        type=["jpg", "png", "jpeg"]
+    )
+
+    if uploaded_file is not None:
+        st.image(uploaded_file, caption="Uploaded Image")
+
+        with tempfile.NamedTemporaryFile(delete=False) as temp:
+            temp.write(uploaded_file.read())
+            temp_path = temp.name
+
+        if st.button("Detect Emotion"):
+            emotion = detect_face_emotion(temp_path)
+            song, quote = recommend(emotion)
+
+            st.success(f"Detected Emotion: {emotion}")
+            st.write("🎵 **Recommended Song:**", song)
+            st.write("💬 **Quote:**", quote)
