@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 from textblob import TextBlob
@@ -11,6 +10,7 @@ import tempfile
 # -----------------------------
 @st.cache_data
 def load_data():
+    # Ensure this file exists in your repository with headers: emotions,songs,quote
     return pd.read_csv("emotions_data.csv")
 
 emotion_df = load_data()
@@ -47,9 +47,11 @@ def detect_face_emotion(image_path):
 # Recommendation Function
 # -----------------------------
 def recommend(emotion):
-    row = emotion_df[emotion_df["Emotion"].str.lower() == emotion.lower()]
+    # FIX: Changed "Emotion" to "emotions" to match your CSV 
+    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()]
     if not row.empty:
-        return row.iloc[0]["Song"], row.iloc[0]["Quote"]
+        # FIX: Changed "Song"/"Quote" to "songs"/"quote" to match your CSV 
+        return row.iloc[0]["songs"], row.iloc[0]["quote"]
     else:
         return "No song found", "No quote found"
 
@@ -87,7 +89,7 @@ st.header("📷 Emotion Detection from Face Image")
 uploaded_file = st.file_uploader("Upload a face image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+    st.image(uploaded_file, caption="Uploaded Image")
 
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(uploaded_file.read())
@@ -96,7 +98,8 @@ if uploaded_file is not None:
     if st.button("Detect Emotion from Face"):
         with st.spinner("Analyzing face emotion..."):
             emotion = detect_face_emotion(temp_path)
-            Song, Quote = recommend(emotion)
+            # FIX: Used lowercase song, quote to match the st.write calls below
+            song, quote = recommend(emotion)
 
             st.success(f"Detected Emotion: **{emotion}**")
             st.write(f"🎶 **Song:** {song}")
@@ -105,6 +108,3 @@ if uploaded_file is not None:
 # -----------------------------
 st.markdown("---")
 st.caption("AI Project | Emotion-Based Recommendation System")
-
-
-
