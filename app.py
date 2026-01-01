@@ -96,7 +96,7 @@ if uploaded_file is not None:
     if st.button("Detect Emotion from Face"):
         with st.spinner("Analyzing face emotion..."):
             emotion = detect_face_emotion(temp_path)
-            song, quote = recommend(emotion)
+            Song, Quote = recommend(emotion)
 
             st.success(f"Detected Emotion: **{emotion}**")
             st.write(f"🎶 **Song:** {song}")
@@ -106,27 +106,5 @@ if uploaded_file is not None:
 st.markdown("---")
 st.caption("AI Project | Emotion-Based Recommendation System")
 
-# -----------------------------
-# Recommendation Function
-# -----------------------------
-def recommend(emotion):
-    # Use lowercase "emotions" to match your CSV header
-    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()] 
-    if not row.empty:
-        # Use lowercase "songs" and "quote" to match your CSV headers
-        return row.iloc[0]["songs"], row.iloc[0]["quote"]
-    else:
-        return "No song found", "No quote found"
 
-# -----------------------------
-# Recommendation Function
-# -----------------------------
-def recommend(emotion):
-    # Change "Emotion" to "emotions" to match your CSV
-    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()]
-    
-    if not row.empty:
-        # Change "Song" to "songs" and "Quote" to "quote" to match your CSV
-        return row.iloc[0]["songs"], row.iloc[0]["quote"]
-    else:
-        return "No song found", "No quote found"
+
