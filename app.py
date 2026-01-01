@@ -4,4 +4,11 @@ from textblob import TextBlob
 from deepface import DeepFace
 import tempfile
 
-# The rest of your code follows here...
+# ----------------------
+# Page config
+# ----------------------
+st.set_page_config(
+    page_title="Emotion Detection & Recommendation",
+    page_icon="😊"
+)
+# ... the rest of your code
