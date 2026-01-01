@@ -24,7 +24,6 @@ emotion_df = pd.read_csv("emotions_data.csv")
 # ----------------------
 def detect_text_emotion(text):
     polarity = TextBlob(text).sentiment.polarity
-
     if polarity > 0.5:
         return "Happy"
     elif polarity > 0.1:
@@ -45,9 +44,9 @@ def detect_face_emotion(image_path):
     return result[0]['dominant_emotion']
 
 def recommend(emotion):
-    row = emotion_df[emotion_df["Emotion"].str.lower() == emotion.lower()]
+    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()]
     if not row.empty:
-        return row.iloc[0]["Song"], row.iloc[0]["Quote"]
+        return row.iloc[0]["songs"], row.iloc[0]["quote"]
     else:
         return "No song found", "No quote found"
 
@@ -64,14 +63,15 @@ option = st.radio(
 # ----------------------
 if option == "Text Emotion Detection":
     text = st.text_area("Enter how you feel:")
-
     if st.button("Detect Emotion"):
-        emotion = detect_text_emotion(text)
-        song, quote = recommend(emotion)
-
-        st.success(f"Detected Emotion: {emotion}")
-        st.write("🎵 **Recommended Song:**", song)
-        st.write("💬 **Quote:**", quote)
+        if text.strip() == "":
+            st.warning("Please enter some text.")
+        else:
+            emotion = detect_text_emotion(text)
+            song, quote = recommend(emotion)
+            st.success(f"Detected Emotion: {emotion}")
+            st.write("🎵 **Recommended Song:**", song)
+            st.write("💬 **Quote:**", quote)
 
 # ----------------------
 # FACE EMOTION
@@ -81,18 +81,14 @@ if option == "Face Emotion Detection":
         "Upload your face image",
         type=["jpg", "png", "jpeg"]
     )
-
     if uploaded_file is not None:
         st.image(uploaded_file, caption="Uploaded Image")
-
         with tempfile.NamedTemporaryFile(delete=False) as temp:
             temp.write(uploaded_file.read())
             temp_path = temp.name
-
         if st.button("Detect Emotion"):
             emotion = detect_face_emotion(temp_path)
             song, quote = recommend(emotion)
-
             st.success(f"Detected Emotion: {emotion}")
             st.write("🎵 **Recommended Song:**", song)
             st.write("💬 **Quote:**", quote)
