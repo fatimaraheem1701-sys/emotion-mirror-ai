@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 from textblob import TextBlob
@@ -104,3 +105,15 @@ if uploaded_file is not None:
 # -----------------------------
 st.markdown("---")
 st.caption("AI Project | Emotion-Based Recommendation System")
+
+# -----------------------------
+# Recommendation Function
+# -----------------------------
+def recommend(emotion):
+    # Use lowercase "emotions" to match your CSV header
+    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()] 
+    if not row.empty:
+        # Use lowercase "songs" and "quote" to match your CSV headers
+        return row.iloc[0]["songs"], row.iloc[0]["quote"]
+    else:
+        return "No song found", "No quote found"
