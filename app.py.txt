@@ -1,3 +1,25 @@
+emotions,songs,quote
+happy,"Happy, Pharrell Williams","Happiness is a choice"
+sad,"Someone Like You, Adele","Every storm ends."
+angry,"Believer, Imagine Dragons","Control anger before it controls you."
+fear,"Demons, Imagine Dragons","Fear is short, regret lasts."
+surprise,"Uptown Funk, Bruno Mars","Life is full of surprises."
+disgust,"Bad Guy, Billie Eilish","Negativity hurts the soul."
+neutral,"Let It Be, Beatles","Peace starts with acceptance."
+love,"Perfect, Ed Sheeran","Love is the strongest feeling."
+lonely,"Fix You, Coldplay","You are never alone."
+relaxed,"Weightless, Marconi Union","A calm mind is strong."
+motivated,"Eye of the Tiger, Survivor","Push yourself, nobody else will."
+depressed,"1-800-273-8255, Logic","This feeling will pass."
+excited,"Can't Stop the Feeling, JT","Focus gives energy."
+calm,"River, Leon Bridges","Silence can heal."
+confident,"Stronger, Kanye West","Believe in yourself."
+bored,"Stressed Out, Twenty One Pilots","Boredom is hidden creativity."
+hopeful,"Hall of Fame, The Script","Hope is stronger than fear."
+grateful,"Thank You, Dido","Gratitude makes enough."
+anxious,"Breathin, Ariana Grande","Anxiety does not define you."
+proud,"We Are The Champions, Queen","Be proud of your progress."
+
 import streamlit as st
 import pandas as pd
 from textblob import TextBlob
