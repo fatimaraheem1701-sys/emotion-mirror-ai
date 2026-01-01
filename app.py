@@ -117,3 +117,16 @@ def recommend(emotion):
         return row.iloc[0]["songs"], row.iloc[0]["quote"]
     else:
         return "No song found", "No quote found"
+
+# -----------------------------
+# Recommendation Function
+# -----------------------------
+def recommend(emotion):
+    # Change "Emotion" to "emotions" to match your CSV
+    row = emotion_df[emotion_df["emotions"].str.lower() == emotion.lower()]
+    
+    if not row.empty:
+        # Change "Song" to "songs" and "Quote" to "quote" to match your CSV
+        return row.iloc[0]["songs"], row.iloc[0]["quote"]
+    else:
+        return "No song found", "No quote found"
